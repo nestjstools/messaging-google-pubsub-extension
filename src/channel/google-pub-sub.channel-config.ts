@@ -1,15 +1,17 @@
 import { ChannelConfig } from '@nestjstools/messaging';
 
 export class GooglePubSubChannelConfig extends ChannelConfig {
-  public readonly credentials: Credentials;
+  public readonly credentials?: Credentials;
   public readonly topicName: string;
   public readonly subscriptionName: string;
+  public readonly autoCreate?: boolean;
 
   constructor({
                 name,
                 credentials,
                 topicName,
                 subscriptionName,
+                autoCreate,
                 enableConsumer,
                 avoidErrorsForNotExistedHandlers,
                 middlewares,
@@ -19,6 +21,7 @@ export class GooglePubSubChannelConfig extends ChannelConfig {
     this.credentials = credentials;
     this.topicName = topicName;
     this.subscriptionName = subscriptionName;
+    this.autoCreate = autoCreate ?? true;
   }
 }
 

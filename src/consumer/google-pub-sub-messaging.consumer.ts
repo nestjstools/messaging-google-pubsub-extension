@@ -4,29 +4,38 @@ import { ConsumerMessageDispatcher } from '@nestjstools/messaging';
 import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { MessageConsumer } from '@nestjstools/messaging';
 import { ConsumerDispatchedMessageError } from '@nestjstools/messaging';
+import { ROUTING_KEY_ATTRIBUTE_NAME } from '../const';
 
 @Injectable()
 @MessageConsumer(GooglePubSubChannel)
 export class GooglePubSubMessagingConsumer implements IMessagingConsumer<GooglePubSubChannel>, OnApplicationShutdown {
-  private channel?: GooglePubSubChannel = undefined;
+  private channel: GooglePubSubChannel;
 
   async consume(dispatcher: ConsumerMessageDispatcher, channel: GooglePubSubChannel): Promise<void> {
     this.channel = channel;
     const manager = this.channel.pubSubManager;
 
-    await manager.createTopic(this.channel.config.topicName);
-    const topic = manager.topic(this.channel.config.topicName);
+    const [topics] = await manager.getTopics();
+    const topicExists = topics.some(t => t.name.endsWith(channel.config.topicName));
+
+    if (!topicExists && channel.config.autoCreate) {
+      await manager.createTopic(channel.config.topicName);
+    }
+
+    const topic = manager.topic(channel.config.topicName);
 
     const [subscriptions] = await topic.getSubscriptions();
-    const subscriptionExists = subscriptions.some(sub => sub.name === `projects/${manager.projectId}/subscriptions/${this.channel.config.subscriptionName}`);
+    const subscriptionExists = subscriptions.some(
+      sub => sub.name.endsWith(channel.config.subscriptionName)
+    );
 
-    if (!subscriptionExists) {
-      await topic.createSubscription(this.channel.config.subscriptionName);
+    if (!subscriptionExists && channel.config.autoCreate) {
+      await topic.createSubscription(channel.config.subscriptionName);
     }
 
     manager.subscription(this.channel.config.subscriptionName).on('message', message => {
-        dispatcher.dispatch(new ConsumerMessage(JSON.parse(message.data.toString()), message.attributes.routingKey));
-        message.ack();
+      dispatcher.dispatch(new ConsumerMessage(JSON.parse(message.data.toString()), message.attributes[ROUTING_KEY_ATTRIBUTE_NAME]));
+      message.ack();
     });
 
     return Promise.resolve();
