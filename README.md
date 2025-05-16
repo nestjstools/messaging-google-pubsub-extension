@@ -109,6 +109,24 @@ export class CreateUserHandler implements IMessageHandler<CreateUser>{
 * Easily configure projectId, topicName, and subscriptionName for full control over Pub/Sub setup.
 ---
 
+## 📨 Communicating Beyond a NestJS Application (Cross-Language Messaging)
+
+### To enable communication with a Handler from services written in other languages, follow these steps:
+
+1. **Publish a Message to the Topic**
+
+2. **Include the Routing Key Header**
+   Your message **must** include a header attribute named `messaging-routing-key`.
+   The value should correspond to the routing key defined in your NestJS message handler:
+
+   ```ts
+   @MessageHandler('my_app_command.create_user') // <-- Use this value as the routing key
+   ```
+
+3. **You're Done!**
+   Once the message is published with the correct routing key, it will be automatically routed to the appropriate handler within the NestJS application.
+---
+
 ## Configuration options
 
 ### GooglePubSubChannel
