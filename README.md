@@ -123,8 +123,12 @@ export class CreateUserHandler implements IMessageHandler<CreateUser>{
    @MessageHandler('my_app_command.create_user') // <-- Use this value as the routing key
    ```
 
-3. **You're Done!**
-   Once the message is published with the correct routing key, it will be automatically routed to the appropriate handler within the NestJS application.
+---
+## 🔧 Send additional attributes into your message
+
+   ```ts
+    this.pubSubMessageBus.dispatch(new RoutingMessage(new CreateUser('id'), 'my_app_command.create_user', new GooglePubSubMessageOptions({YourAttribute: 'value'})));
+   ```
 ---
 
 ## Configuration options
