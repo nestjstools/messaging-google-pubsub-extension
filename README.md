@@ -79,7 +79,7 @@ export class AppController {
 
   @Get('/pubsub')
   createUser(): string {
-    this.pubsubMessageBus.dispatch(new RoutingMessage(new CreateUser('John FROM SQS'), 'my_app_command.create_user'));
+    this.pubsubMessageBus.dispatch(new RoutingMessage(new CreateUser('John FROM pubsub'), 'my_app_command.create_user'));
 
     return 'Message sent';
   }
