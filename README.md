@@ -33,11 +33,11 @@ yarn add @nestjstools/messaging @nestjstools/messaging-google-pubsub-extension
 import { Module } from '@nestjs/common';
 import { MessagingModule } from '@nestjstools/messaging';
 import { SendMessageHandler } from './handlers/send-message.handler';
-import { MessagingGooglePubSubExtensionModule, GooglePubSubChannelConfig } from "@nestjstools/messager-google-pubsub-extension";
+import { MessagingGooglePubSubExtensionModule, GooglePubSubChannelConfig } from '@nestjstools/messaging-google-pubsub-extension';
 
 @Module({
   imports: [
-    MessagingGooglePubSubExtensionModule, // Importing the SQS extension module
+    MessagingGooglePubSubExtensionModule, // Importing the GooglePubSub extension module
     MessagingModule.forRoot({
       buses: [
         {
