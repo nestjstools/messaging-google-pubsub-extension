@@ -41,13 +41,13 @@ import { MessagingGooglePubSubExtensionModule, GooglePubSubChannelConfig } from 
     MessagingModule.forRoot({
       buses: [
         {
-          name: 'pubsub-event.bus',
-          channels: ['pubsub-event'],
+          name: 'message.bus',
+          channels: ['pubsub-command'],
         },
       ],
       channels: [
         new GooglePubSubChannelConfig({
-          name: 'pubsub-event',
+          name: 'pubsub-command',
           enableConsumer: true, // Enable if you want to consume messages
           autoCreate: true, // Auto-create queue if it doesn't exist
           credentials: { // Optional
@@ -74,7 +74,7 @@ import { IMessageBus, MessageBus, RoutingMessage } from '@nestjstools/messaging'
 @Controller()
 export class AppController {
   constructor(
-    @MessageBus('pubsub-event.bus') private pubsubMessageBus: IMessageBus,
+    @MessageBus('message.bus') private pubsubMessageBus: IMessageBus,
   ) {}
 
   @Get('/pubsub')
