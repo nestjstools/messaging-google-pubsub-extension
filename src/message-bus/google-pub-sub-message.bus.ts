@@ -8,28 +8,38 @@ import { GooglePubSubMessageOptions } from '../message/google-pub-sub-message-op
 
 @Injectable()
 export class GooglePubSubMessageBus implements IMessageBus {
-  constructor(
-    private readonly channel: GooglePubSubChannel,
-  ) {
-  }
+  constructor(private readonly channel: GooglePubSubChannel) {}
 
   async dispatch(message: RoutingMessage): Promise<object | void> {
     const messageOptions = message.messageOptions;
 
-    if (messageOptions !== undefined && !(messageOptions instanceof GooglePubSubMessageOptions)) {
-      throw new Error(`Message options must be a ${GooglePubSubMessageOptions.name} object`);
+    if (
+      messageOptions !== undefined &&
+      !(messageOptions instanceof GooglePubSubMessageOptions)
+    ) {
+      throw new Error(
+        `Message options must be a ${GooglePubSubMessageOptions.name} object`,
+      );
     }
 
-    const topic = this.channel.pubSubManager.topic(this.channel.config.topicName);
+    const topic = this.channel.pubSubManager.topic(
+      this.channel.config.topicName,
+    );
     const serializedMessage = JSON.stringify(message.message);
     const data = Buffer.from(serializedMessage);
 
     if (messageOptions instanceof GooglePubSubMessageOptions) {
-      const attributes = { [ROUTING_KEY_ATTRIBUTE_NAME]: message.messageRoutingKey, ...messageOptions.attributes } ;
+      const attributes = {
+        [ROUTING_KEY_ATTRIBUTE_NAME]: message.messageRoutingKey,
+        ...messageOptions.attributes,
+      };
       await topic.publishMessage({ data, attributes });
       return;
     }
 
-    await topic.publishMessage({ data, attributes: {[ROUTING_KEY_ATTRIBUTE_NAME]: message.messageRoutingKey} });
+    await topic.publishMessage({
+      data,
+      attributes: { [ROUTING_KEY_ATTRIBUTE_NAME]: message.messageRoutingKey },
+    });
   }
 }
