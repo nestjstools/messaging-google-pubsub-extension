@@ -7,17 +7,23 @@ export class GooglePubSubChannelConfig extends ChannelConfig {
   public readonly autoCreate?: boolean;
 
   constructor({
-                name,
-                credentials,
-                topicName,
-                subscriptionName,
-                autoCreate,
-                enableConsumer,
-                avoidErrorsForNotExistedHandlers,
-                middlewares,
-                normalizer,
-              }: GooglePubSubChannelConfig) {
-    super(name, avoidErrorsForNotExistedHandlers, middlewares, enableConsumer, normalizer)
+    name,
+    credentials,
+    topicName,
+    subscriptionName,
+    autoCreate,
+    enableConsumer,
+    avoidErrorsForNotExistedHandlers,
+    middlewares,
+    normalizer,
+  }: GooglePubSubChannelConfig) {
+    super(
+      name,
+      avoidErrorsForNotExistedHandlers,
+      middlewares,
+      enableConsumer,
+      normalizer,
+    );
     this.credentials = credentials;
     this.topicName = topicName;
     this.subscriptionName = subscriptionName;

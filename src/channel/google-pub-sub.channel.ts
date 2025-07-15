@@ -7,6 +7,13 @@ export class GooglePubSubChannel extends Channel<GooglePubSubChannelConfig> {
 
   constructor(config: GooglePubSubChannelConfig) {
     super(config);
-    this.pubSubManager = new PubSub({ projectId: config.credentials?.projectId });
+    this.pubSubManager = new PubSub({
+      projectId: config.credentials?.projectId,
+    });
+  }
+
+  async onChannelDestroy(): Promise<void> {
+    await this.pubSubManager.close();
+    return super.onChannelDestroy();
   }
 }
