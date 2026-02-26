@@ -2,15 +2,26 @@
     <image src="nestjstools-logo.png" width="400">
 </p>
 
-# @nestjstools/messaging-google-pubsub-extension
+# NestJS Google Cloud Pub/Sub Messaging Extension – Event-Driven Transport for Distributed Systems
 
-A NestJS library for managing asynchronous and synchronous messages with support for buses, handlers, channels, and consumers. This library simplifies building scalable and decoupled applications by facilitating robust message handling pipelines while ensuring flexibility and reliability.
+### This extension allows you to use **Google Cloud Pub/Sub as a message bus channel**.
+
+A Google Cloud Pub/Sub transport adapter for the **NestJSTools Messaging Library**, enabling scalable, event-driven and distributed architectures in NestJS applications.
+
+Designed for:
+
+* Google Cloud microservices
+* Event-driven systems
+* CQRS architectures
+* Cross-language messaging
+* Distributed platforms running on GCP
 
 ---
 
 ## Documentation
 
-https://nestjstools.gitbook.io/nestjstools-messaging-docs
+* https://docs.nestjstools.com/messaging
+* https://nestjstools.com
 
 ---
 
