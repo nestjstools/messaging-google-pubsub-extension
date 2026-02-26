@@ -44,8 +44,8 @@ export class GooglePubSubMessagingConsumer
 
     manager
       .subscription(this.channel.config.subscriptionName)
-      .on('message', (message) => {
-        dispatcher.dispatch(
+      .on('message', async (message) => {
+        await dispatcher.dispatch(
           new ConsumerMessage(
             JSON.parse(message.data.toString()),
             message.attributes[ROUTING_KEY_ATTRIBUTE_NAME],
